@@ -20,10 +20,10 @@ public class HighscoresController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetHighScoresAsync()
     {
-        List<PlayerResponse> highScores = await _highScoresService.GetHighScoresAsync();
+        List<ScoreResponse> highScores = await _highScoresService.GetHighScoresAsync();
         if (highScores == null || highScores.Count == 0)
         {
-            return Ok(new List<PlayerResponse>());
+            return Ok(new List<ScoreResponse>());
         }
         return Ok(highScores);
     }
@@ -63,16 +63,10 @@ public class HighscoresController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteHighscoresAsync()
-    {
-        return NoContent();
-    }
-
     [HttpGet("id")]
     public async Task<IActionResult> GetByIdAsync(int id)
     {
-        PlayerResponse response = await _highScoresService.GetByIdAsync(id);
+        ScoreResponse response = await _highScoresService.GetByIdAsync(id);
         return Ok(response);
     }
 }
