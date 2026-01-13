@@ -6,10 +6,9 @@ namespace Examensarbete.HighscoreMicroService.Core.Interfaces
     public interface IHighScoresService
     {
         Task<bool> DeleteHighscoreEntryAsync(int id);
-        Task DeleteHighscoresAsync();
-        Task<PlayerResponse> GetByIdAsync(int id);
-        Task<List<PlayerResponse>> GetHighScoresAsync();
+        Task<ScoreResponse> GetByIdAsync(int id);
+        Task<List<ScoreResponse>> GetHighScoresAsync();
         Task<bool> ResetHighScoresAsync();
-        Task<PlayerResponse> SubmitScoreAsync(AddScoreRequest request);
+        Task<ScoreResponse> SubmitScoreAsync(AddScoreRequest request);
     }
 }

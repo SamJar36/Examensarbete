@@ -12,11 +12,11 @@ public class HighscoreController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetHighScoresAsync()
     {
-        List<PlayerResponse> highScores = new List<PlayerResponse>
+        List<ScoreResponse> highScores = new List<ScoreResponse>
         {
-            new PlayerResponse { Name = "ALICE", Score = 1500 },
-            new PlayerResponse { Name = "BOB", Score = 1200 },
-            new PlayerResponse { Name = "CHARLIE", Score = 1000 }
+            new ScoreResponse { Name = "ALICE", Score = 1500 },
+            new ScoreResponse { Name = "BOB", Score = 1200 },
+            new ScoreResponse { Name = "CHARLIE", Score = 1000 }
         };
         return Ok(highScores);
     }
@@ -35,12 +35,6 @@ public class HighscoreController : ControllerBase
 
     [HttpDelete("id")]
     public async Task<IActionResult> DeleteHighscoreEntryAsync(int id)
-    {
-        return NoContent();
-    }
-
-    [HttpDelete]
-    public async Task<IActionResult> DeleteHighscoresAsync()
     {
         return NoContent();
     }

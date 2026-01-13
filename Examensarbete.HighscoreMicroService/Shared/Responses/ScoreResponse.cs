@@ -1,6 +1,6 @@
 ﻿namespace Examensarbete.HighscoreMicroService.Shared.Responses;
 
-public class PlayerResponse
+public class ScoreResponse
 {
     public string Name { get; set; }
     public int Score { get; set; }

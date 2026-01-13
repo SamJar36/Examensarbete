@@ -1,24 +1,24 @@
 ﻿using Examensarbete.HighscoreMicroService.Shared.Responses;
 using Examensarbete.HighscoreMicroService.Shared.Requests;
 using Examensarbete.HighscoreMicroService.Core.Interfaces;
+using Examensarbete.HighscoreMicroService.Data.Models;
 
 namespace Examensarbete.HighscoreMicroService.Core.Services;
 
 public class HighScoresService : IHighScoresService
 {
-    public async Task<List<PlayerResponse>> GetHighScoresAsync()
+    public async Task<List<ScoreResponse>> GetHighScoresAsync()
     {
-        return new List<PlayerResponse>();
+        return new List<ScoreResponse>();
     }
 
-    public async Task<PlayerResponse> SubmitScoreAsync(AddScoreRequest request)
+    public async Task<ScoreResponse> SubmitScoreAsync(AddScoreRequest request)
     {
-        return new PlayerResponse();
+        return new ScoreResponse();
     }
 
     public async Task<bool> ResetHighScoresAsync()
     {
-        DeleteAllScores();
         //then populate list with preset scores
         //if successful, return true
         bool result = true;
@@ -31,18 +31,23 @@ public class HighScoresService : IHighScoresService
         return result;
     }
 
-    public async Task DeleteHighscoresAsync()
+    public async Task<ScoreResponse> GetByIdAsync(int id)
     {
-        DeleteAllScores();
+        return new ScoreResponse();
     }
 
-    public async Task<PlayerResponse> GetByIdAsync(int id)
+    private List<ScoreResponse> ConvertFromModelListToResponseList(List<HighscoreEntry> highScores)
     {
-        return new PlayerResponse();
-    }
-
-    private void DeleteAllScores()
-    {
-        // do the thing
+        List<ScoreResponse> newList = new List<ScoreResponse>();
+        foreach (var score in highScores)
+        {
+            ScoreResponse response = new ScoreResponse
+            {
+                Name = score.Name,
+                Score = score.Score
+            };
+            newList.Add(response);
+        }
+        return newList;
     }
 }
