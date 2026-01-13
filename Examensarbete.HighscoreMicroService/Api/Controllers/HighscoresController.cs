@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Examensarbete.Api.Shared.Responses;
-using Examensarbete.Api.Shared.Requests;
+using Examensarbete.HighscoreMicroService.Shared.Requests;
+using Examensarbete.HighscoreMicroService.Shared.Responses;
+using Examensarbete.HighscoreMicroService.Core.Interfaces;
 
-namespace Examensarbete.Api.Controllers;
+namespace Examensarbete.HighscoreMicroService.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HighscoreController : ControllerBase
+public class HighscoresController : ControllerBase
 {
+    private readonly IHighScoresService _highScoresService;
+    public HighscoresController(IHighScoresService highScoresService)
+    {
+        _highScoresService = highScoresService;
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetHighScoresAsync()
     {
-        List<PlayerResponse> highScores = new List<PlayerResponse>
-        {
-            new PlayerResponse { Name = "ALICE", Score = 1500 },
-            new PlayerResponse { Name = "BOB", Score = 1200 },
-            new PlayerResponse { Name = "CHARLIE", Score = 1000 }
-        };
-        return Ok(highScores);
+        return Ok();
     }
 
     [HttpPost]
