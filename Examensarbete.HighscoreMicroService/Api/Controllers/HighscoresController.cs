@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Examensarbete.HighscoreMicroService.Shared.Requests;
 using Examensarbete.HighscoreMicroService.Shared.Responses;
 using Examensarbete.HighscoreMicroService.Core.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Examensarbete.HighscoreMicroService.Api.Controllers;
 
@@ -19,25 +20,47 @@ public class HighscoresController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetHighScoresAsync()
     {
-        return Ok();
+        List<PlayerResponse> highScores = await _highScoresService.GetHighScoresAsync();
+        if (highScores == null || highScores.Count == 0)
+        {
+            return Ok(new List<PlayerResponse>());
+        }
+        return Ok(highScores);
     }
 
     [HttpPost]
     public async Task<IActionResult> SubmitScoreAsync([FromBody] AddScoreRequest request)
     {
+        var result = await _highScoresService.SubmitScoreAsync(request);
         return Created();
     }
 
     [HttpPost("reset")]
     public async Task<IActionResult> ResetHighScoresAsync()
     {
-        return Created();
+        bool isReset = await _highScoresService.ResetHighScoresAsync();
+        if (isReset == false)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to reset high scores.");
+        }
+        else
+        {
+            return Created();
+        }
     }
 
     [HttpDelete("id")]
     public async Task<IActionResult> DeleteHighscoreEntryAsync(int id)
     {
-        return NoContent();
+        bool isDeleted = await _highScoresService.DeleteHighscoreEntryAsync(id);
+        if (isDeleted == false)
+        {
+            return NotFound($"Highscore entry with ID {id} not found.");
+        }
+        else
+        {
+            return NoContent();
+        }
     }
 
     [HttpDelete]
@@ -49,6 +72,7 @@ public class HighscoresController : ControllerBase
     [HttpGet("id")]
     public async Task<IActionResult> GetByIdAsync(int id)
     {
-        return Ok();
+        PlayerResponse response = await _highScoresService.GetByIdAsync(id);
+        return Ok(response);
     }
 }
