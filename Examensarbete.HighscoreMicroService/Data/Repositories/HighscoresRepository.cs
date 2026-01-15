@@ -19,7 +19,7 @@ public class HighScoresRepository : IHighScoresRepository
     public HighScoresRepository(IConfiguration config)
     {
         var client = new MongoClient(config.GetConnectionString("MongoDb"));
-        var database = client.GetDatabase("highscoresdb");
+        var database = client.GetDatabase("highscoredb");
         _highScores = database.GetCollection<HighScoreEntry>("Highscores");
 
         _highScores.InsertMany(_presetHighScores);

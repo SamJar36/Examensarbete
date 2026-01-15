@@ -1,4 +1,7 @@
 <Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="Examensarbete.Api/Examensarbete.Api.csproj" />
   <Project Path="Examensarbete.Blazor/Examensarbete.Blazor.csproj" />
   <Project Path="Examensarbete.HighscoreMicroService/Examensarbete.HighscoreMicroService.csproj" />

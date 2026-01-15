@@ -1,0 +1,51 @@
+networks:
+  examensarbete-network:
+    driver: bridge
+
+services:
+  highscoreservice:
+    image: highscoreservice
+    build:
+      context: .
+      dockerfile: Examensarbete.HighscoreMicroService/Dockerfile
+    ports:
+      - "5001:8080"
+    networks:
+      - examensarbete-network
+    depends_on:
+      - highscoredb
+
+  apigateway:
+    image: apigateway
+    build:
+      context: .
+      dockerfile: Examensarbete.Api/Dockerfile
+    ports:
+      - "5002:8080"
+    networks:
+      - examensarbete-network
+
+  blazorclient:
+    image: blazorclient
+    build:
+      context: .
+      dockerfile: Examensarbete.Blazor/Dockerfile
+    ports:
+      - "5003:8080"
+    networks:
+      - examensarbete-network
+
+  highscoredb:
+    image: mongo:4.4
+    container_name: highscoredb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: samjar
+      MONGO_INITDB_ROOT_PASSWORD: howaboutthemapples3
+      MONGO_INITDB_DATABASE: highscoredb
+    ports:
+      - "27017:27017"
+    volumes:
+      - highscoredbdata:/data/db
+
+
+  
