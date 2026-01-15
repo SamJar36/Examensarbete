@@ -1,41 +1,42 @@
 ﻿using MongoDB.Driver;
 using Examensarbete.HighscoreMicroService.Data.Models;
+using Examensarbete.HighscoreMicroService.Data.Interfaces;
 
 namespace Examensarbete.HighscoreMicroService.Data.Repositories;
 
-public class HighscoresRepository
+public class HighScoresRepository : IHighScoresRepository
 {
-    private readonly IMongoCollection<HighscoreEntry> _highScores;
-    private List<HighscoreEntry> _presetHighScores = new List<HighscoreEntry>
+    private readonly IMongoCollection<HighScoreEntry> _highScores;
+    private List<HighScoreEntry> _presetHighScores = new List<HighScoreEntry>
     {
-        new HighscoreEntry { Name = "Alice", Score = 1000 },
-        new HighscoreEntry { Name = "Bob", Score = 900 },
-        new HighscoreEntry { Name = "Charlie", Score = 800 },
-        new HighscoreEntry { Name = "Diana", Score = 700 },
-        new HighscoreEntry { Name = "Eve", Score = 600 }
+        new HighScoreEntry { Name = "Alice", Score = 1000 },
+        new HighScoreEntry { Name = "Bob", Score = 900 },
+        new HighScoreEntry { Name = "Charlie", Score = 800 },
+        new HighScoreEntry { Name = "Diana", Score = 700 },
+        new HighScoreEntry { Name = "Eve", Score = 600 }
     };
 
-    public HighscoresRepository(IConfiguration config)
+    public HighScoresRepository(IConfiguration config)
     {
         var client = new MongoClient(config.GetConnectionString("MongoDb"));
         var database = client.GetDatabase("highscoresdb");
-        _highScores = database.GetCollection<HighscoreEntry>("Highscores");
+        _highScores = database.GetCollection<HighScoreEntry>("Highscores");
 
         _highScores.InsertMany(_presetHighScores);
     }
 
-    public async Task<List<HighscoreEntry>> GetHighScoresAsync()
+    public async Task<List<HighScoreEntry>> GetHighScoresAsync()
     {
         return await _highScores.Find(_ => true).SortByDescending(h => h.Score).ToListAsync();
     }
 
-    public async Task<HighscoreEntry> SubmitScoreAsync(HighscoreEntry entry)
+    public async Task<HighScoreEntry> SubmitScoreAsync(HighScoreEntry entry)
     {
         await _highScores.InsertOneAsync(entry);
         return entry;
     }
 
-    public async Task<bool> ResetHighscoresAsync()
+    public async Task<bool> ResetHighScoresAsync()
     {
         var deleteResult = await _highScores.DeleteManyAsync(_ => true);
         if (deleteResult.IsAcknowledged)
@@ -46,9 +47,18 @@ public class HighscoresRepository
         return false;
     }
 
-    public async Task<bool> DeleteHighscoreEntryAsync(int id)
+    public async Task<bool> DeleteHighScoreEntryAsync(int id)
     {
         var deleteResult = await _highScores.DeleteOneAsync(h => h.Id == id);
-        
+        if (deleteResult.IsAcknowledged)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<HighScoreEntry> GetByIdAsync(int id)
+    {
+        return await _highScores.Find(h => h.Id == id).FirstOrDefaultAsync();
     }
 }

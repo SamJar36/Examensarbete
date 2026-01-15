@@ -2,41 +2,47 @@
 using Examensarbete.HighscoreMicroService.Shared.Requests;
 using Examensarbete.HighscoreMicroService.Core.Interfaces;
 using Examensarbete.HighscoreMicroService.Data.Models;
+using Examensarbete.HighscoreMicroService.Data.Interfaces;
 
 namespace Examensarbete.HighscoreMicroService.Core.Services;
 
 public class HighScoresService : IHighScoresService
 {
+    private readonly IHighScoresRepository _highScoresRepository;
+
+    public HighScoresService(IHighScoresRepository highScoresRepository)
+    {
+        _highScoresRepository = highScoresRepository;
+    }
     public async Task<List<ScoreResponse>> GetHighScoresAsync()
     {
-        return new List<ScoreResponse>();
+        var highScores = await _highScoresRepository.GetHighScoresAsync();
+        return ConvertModelListToResponseList(highScores);
     }
 
     public async Task<ScoreResponse> SubmitScoreAsync(AddScoreRequest request)
     {
-        return new ScoreResponse();
+        var highScore = await _highScoresRepository.SubmitScoreAsync(ConvertAddScoreRequestToModel(request));
+        return ConvertModelToResponse(highScore);
     }
 
     public async Task<bool> ResetHighScoresAsync()
     {
-        //then populate list with preset scores
-        //if successful, return true
-        bool result = true;
-        return result;
+        return await _highScoresRepository.ResetHighScoresAsync();
     }
 
     public async Task<bool> DeleteHighscoreEntryAsync(int id)
     {
-        bool result = true;
-        return result;
+        return await _highScoresRepository.DeleteHighScoreEntryAsync(id);
     }
 
     public async Task<ScoreResponse> GetByIdAsync(int id)
     {
-        return new ScoreResponse();
+        var highScore = await _highScoresRepository.GetByIdAsync(id);
+        return ConvertModelToResponse(highScore);
     }
 
-    private List<ScoreResponse> ConvertFromModelListToResponseList(List<HighscoreEntry> highScores)
+    private List<ScoreResponse> ConvertModelListToResponseList(List<HighScoreEntry> highScores)
     {
         List<ScoreResponse> newList = new List<ScoreResponse>();
         foreach (var score in highScores)
@@ -49,5 +55,25 @@ public class HighScoresService : IHighScoresService
             newList.Add(response);
         }
         return newList;
+    }
+
+    private HighScoreEntry ConvertAddScoreRequestToModel(AddScoreRequest request)
+    {
+        HighScoreEntry entry = new HighScoreEntry
+        {
+            Name = request.Name,
+            Score = request.Score
+        };
+        return entry;
+    }
+
+    private ScoreResponse ConvertModelToResponse(HighScoreEntry entry)
+    {
+        ScoreResponse response = new ScoreResponse
+        {
+            Name = entry.Name,
+            Score = entry.Score
+        };
+        return response;
     }
 }

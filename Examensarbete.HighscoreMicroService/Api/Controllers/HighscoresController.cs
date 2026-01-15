@@ -9,10 +9,10 @@ namespace Examensarbete.HighscoreMicroService.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HighscoresController : ControllerBase
+public class HighScoresController : ControllerBase
 {
     private readonly IHighScoresService _highScoresService;
-    public HighscoresController(IHighScoresService highScoresService)
+    public HighScoresController(IHighScoresService highScoresService)
     {
         _highScoresService = highScoresService;
     }
