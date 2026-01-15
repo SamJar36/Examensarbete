@@ -1,6 +1,6 @@
 ﻿namespace Examensarbete.HighscoreMicroService.Data.Models;
 
-public class HighscoreEntry
+public class HighScoreEntry
 {
     public int Id { get; set; }
     public string Name { get; set; }

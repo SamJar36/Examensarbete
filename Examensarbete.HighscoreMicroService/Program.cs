@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Examensarbete.HighscoreMicroService.Core.Interfaces;
 using Examensarbete.HighscoreMicroService.Core.Services;
+using Examensarbete.HighscoreMicroService.Data.Interfaces;
+using Examensarbete.HighscoreMicroService.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IHighScoresService, HighScoresService>();
+builder.Services.AddScoped<IHighScoresRepository, HighScoresRepository>();
 
 var app = builder.Build();
 
