@@ -35,7 +35,7 @@ public class HighScoresController : ControllerBase
         return Created();
     }
 
-    [HttpPost("reset")]
+    [HttpDelete("reset")]
     public async Task<IActionResult> ResetHighScoresAsync()
     {
         bool isReset = await _highScoresService.ResetHighScoresAsync();
@@ -45,7 +45,7 @@ public class HighScoresController : ControllerBase
         }
         else
         {
-            return Created();
+            return Ok();
         }
     }
 
