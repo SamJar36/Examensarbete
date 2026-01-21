@@ -1,4 +1,6 @@
 ﻿@page "/highscores"
+@rendermode InteractiveServer
+@inject IHttpClientFactory ClientFactory
 @using Examensarbete.Blazor.Shared.Responses;
 
 <PageTitle>Highscores</PageTitle>
@@ -29,7 +31,7 @@
 
 
 @code {
-    private List<ScoreResponse> _highScores = new()
+    private List<ScoreResponse> _highScoresPreset = new()
     {
         new() { Name = "alex", Score = 1200 },
         new() { Name = "sam", Score = 950 },
@@ -46,4 +48,35 @@
         new() { Name = "", Score = 0 },
         new() { Name = "", Score = 0 },
     };
+    private List<ScoreResponse> _highScores = new()
+    {
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var client = ClientFactory.CreateClient("ApiGateway");
+        var response = await client.GetFromJsonAsync<List<ScoreResponse>>("scores/highscores");
+        if (response is not null)
+        {
+            _highScores.Clear();
+            foreach (var score in response)
+            {
+                _highScores.Add(score);
+			};
+        }
+    }
 }
