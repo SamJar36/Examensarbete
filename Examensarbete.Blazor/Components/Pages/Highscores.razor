@@ -3,23 +3,47 @@
 
 <PageTitle>Highscores</PageTitle>
 
-<h1 class="highscore-title">Highscores</h1>
+<div class="background">
+    <h1 class="highscore-title">Highscores</h1>
 
-<ul class="highscore-list">
-    @foreach (var entry in _highScores)
-    {
-        <li class="highscore-item">
-            <span class="player-name">@entry.Name</span>
-            <span class="player-score">@entry.Score</span>
-        </li>
-    }
-</ul>
+    <div class="image-frame">
+        <div class="image-left"></div>
+
+        <div class="highscore-wrapper">
+            <ul class="highscore-list">
+                @foreach (var entry in _highScores)
+                {
+                    <li class="highscore-item">
+                        <span class="player-name">@entry.Name</span>
+                        <span class="player-score">@entry.Score</span>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="image-right"></div>
+    </div>
+</div>
+
+
+
 
 @code {
     private List<ScoreResponse> _highScores = new()
     {
         new() { Name = "alex", Score = 1200 },
         new() { Name = "sam", Score = 950 },
-        new() { Name = "jordan", Score = 800 }
+        new() { Name = "jordan", Score = 800 },
+		new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
+        new() { Name = "", Score = 0 },
     };
 }
