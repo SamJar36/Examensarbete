@@ -7,13 +7,14 @@ namespace Examensarbete.HighscoreMicroService.Data.Repositories;
 public class HighScoresRepository : IHighScoresRepository
 {
     private readonly IMongoCollection<HighScoreEntry> _highScores;
+    private int _nextId = 0;
     private List<HighScoreEntry> _presetHighScores = new List<HighScoreEntry>
     {
-        new HighScoreEntry { Name = "Alice", Score = 1000 },
-        new HighScoreEntry { Name = "Bob", Score = 900 },
-        new HighScoreEntry { Name = "Charlie", Score = 800 },
-        new HighScoreEntry { Name = "Diana", Score = 700 },
-        new HighScoreEntry { Name = "Eve", Score = 600 }
+        new HighScoreEntry { Id = 1, Name = "Alice", Score = 1000 },
+        new HighScoreEntry { Id = 2, Name = "Bob", Score = 900 },
+        new HighScoreEntry { Id = 3, Name = "Charlie", Score = 800 },
+        new HighScoreEntry { Id = 4, Name = "Diana", Score = 700 },
+        new HighScoreEntry { Id = 5, Name = "Eve", Score = 600 }
     };
 
     public HighScoresRepository(IConfiguration config)
@@ -23,15 +24,24 @@ public class HighScoresRepository : IHighScoresRepository
         _highScores = database.GetCollection<HighScoreEntry>("Highscores");
 
         _highScores.InsertMany(_presetHighScores);
+        _nextId = _presetHighScores.Count;
     }
 
     public async Task<List<HighScoreEntry>> GetHighScoresAsync()
     {
-        return await _highScores.Find(_ => true).SortByDescending(h => h.Score).ToListAsync();
+        var scores = await _highScores
+        .Find(_ => true)
+        .SortByDescending(h => h.Score)
+        .ToListAsync();
+
+        var scoresWithEmpties = PopulateListWithEmptyEntries(scores);
+
+        return scoresWithEmpties;
     }
 
     public async Task<HighScoreEntry> SubmitScoreAsync(HighScoreEntry entry)
     {
+        entry.Id = _nextId++;
         await _highScores.InsertOneAsync(entry);
         return entry;
     }
@@ -42,6 +52,7 @@ public class HighScoresRepository : IHighScoresRepository
         if (deleteResult.IsAcknowledged)
         {
             await _highScores.InsertManyAsync(_presetHighScores);
+            _nextId = _presetHighScores.Count;
             return true;
         }
         return false;
@@ -60,5 +71,23 @@ public class HighScoresRepository : IHighScoresRepository
     public async Task<HighScoreEntry> GetByIdAsync(int id)
     {
         return await _highScores.Find(h => h.Id == id).FirstOrDefaultAsync();
+    }
+
+    private List<HighScoreEntry> PopulateListWithEmptyEntries(List<HighScoreEntry> scores)
+    {
+        int needed = 14 - scores.Count;
+        if (needed <= 0)
+        {
+            return scores;
+        }
+        for (int i = 0; i < needed; i++)
+        {
+            scores.Add(new HighScoreEntry
+            {
+                Name = "None",
+                Score = 0
+            });
+        }
+        return scores;
     }
 }
