@@ -34,6 +34,8 @@ services:
       - "5003:8080"
     networks:
       - examensarbete-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
   highscoredb:
     image: mongo:4.4
@@ -47,5 +49,6 @@ services:
     volumes:
       - highscoredbdata:/data/db
 
-
+volumes:
+  highscoredbdata:
   
