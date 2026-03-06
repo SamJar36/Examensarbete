@@ -53,11 +53,5 @@ namespace Examensarbete.PlayerMicroService.Controllers
         {
             return NoContent();
         }
-
-        [HttpDelete("{playerId}/eggs/reset")]
-        public async Task<IActionResult> ResetEggsAsync(Guid playerId)
-        {
-            return NoContent();
-        }
     }
 }
