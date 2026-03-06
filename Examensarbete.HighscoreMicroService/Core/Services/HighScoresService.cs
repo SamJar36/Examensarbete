@@ -31,7 +31,7 @@ public class HighScoresService : IHighScoresService
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Service): Error occurred while fetching high scores: {ex.Message}");
-            throw;
+            return new List<ScoreResponse>();
         }
     }
 
@@ -45,7 +45,7 @@ public class HighScoresService : IHighScoresService
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Service): Error occurred while submitting score: {ex.Message}");
-            throw;
+            return null;
         }
     }
 
@@ -58,7 +58,7 @@ public class HighScoresService : IHighScoresService
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Service): Error occurred while resetting high scores: {ex.Message}");
-            throw;
+            return false;
         }
     }
 
@@ -71,7 +71,7 @@ public class HighScoresService : IHighScoresService
         catch
         {
             Console.WriteLine($"Highscore Microservice (Service): Error occurred while deleting high score entry with ID {id}.");
-            throw;
+            return false;
         }
     }
 
@@ -85,7 +85,7 @@ public class HighScoresService : IHighScoresService
         catch
         {
             Console.WriteLine($"Highscore Microservice (Service): Error occurred while fetching high score entry with ID {id}.");
-            throw;
+            return null;
         }
     }
 
