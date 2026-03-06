@@ -35,7 +35,7 @@ public class HighScoresController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high scores: {ex.Message}");
-            throw;
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while fetching high scores.");
         }
     }
 
@@ -50,7 +50,7 @@ public class HighScoresController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (API): Error occurred while submitting score: {ex.Message}");
-            throw;
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while submitting the score.");
         }
     }
 
@@ -73,7 +73,7 @@ public class HighScoresController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (API): Error occurred while resetting high scores: {ex.Message}");
-            throw;
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while resetting high scores.");
         }
     }
 
@@ -95,7 +95,7 @@ public class HighScoresController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (API): Error occurred while deleting high score entry with ID {id}: {ex.Message}");
-            throw;
+            return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred while deleting high score entry with ID {id}.");
         }
     }
 
@@ -110,7 +110,7 @@ public class HighScoresController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high score entry with ID {id}: {ex.Message}");
-            throw;
+            return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred while fetching high score entry with ID {id}.");
         }
     }
 }
