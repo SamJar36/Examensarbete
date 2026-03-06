@@ -19,50 +19,90 @@ public class HighscoreController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetHighScoresAsync()
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
-        Console.WriteLine("API: Calling Highscore Microservice...");
-        var highScores = await client.GetFromJsonAsync<List<ScoreResponse>>("api/highscores");
-        Console.WriteLine($"API: Returning high scores... {highScores.Count} entries found.");
-        return Ok(highScores);
+        try
+        {
+            var client = _httpClientFactory.CreateClient("HighscoreMicroService");
+            Console.WriteLine("API: Calling Highscore Microservice...");
+            var highScores = await client.GetFromJsonAsync<List<ScoreResponse>>("api/highscores");
+            Console.WriteLine($"API: Returning high scores... {highScores.Count} entries found.");
+            return Ok(highScores);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high scores: {ex.Message}");
+            throw;
+        }   
     }
 
     [HttpPost]
     public async Task<IActionResult> SubmitScoreAsync([FromBody] AddScoreRequest request)
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
-        var response = await client.PostAsJsonAsync("api/highscores", request);
-        return Created("", response);
+        try
+        {
+            var client = _httpClientFactory.CreateClient("HighscoreMicroService");
+            var response = await client.PostAsJsonAsync("api/highscores", request);
+            return Created("", response);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while submitting score: {ex.Message}");
+            throw;
+        }
     }
 
     [HttpDelete("reset")]
     public async Task<IActionResult> ResetHighScoresAsync()
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
-        var response = await client.DeleteAsync("api/highscores/reset");
-        if (response.IsSuccessStatusCode == false)
+        try
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to reset high scores.");
+            var client = _httpClientFactory.CreateClient("HighscoreMicroService");
+            var response = await client.DeleteAsync("api/highscores/reset");
+            if (response.IsSuccessStatusCode == false)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to reset high scores.");
+            }
+            return NoContent();
         }
-        return NoContent();
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while resetting high scores: {ex.Message}");
+            throw;
+        }
     }
 
     [HttpDelete("id")]
-    public async Task<IActionResult> DeleteHighscoreEntryAsync(int id)
+    public async Task<IActionResult> DeleteHighscoreEntryAsync(Guid id)
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
-        var response = await client.DeleteAsync($"api/highscores/{id}");
-        if (response.IsSuccessStatusCode == false)
+        try
         {
-            return NotFound($"Highscore entry with ID {id} not found.");
+            var client = _httpClientFactory.CreateClient("HighscoreMicroService");
+            var response = await client.DeleteAsync($"api/highscores/{id}");
+            if (response.IsSuccessStatusCode == false)
+            {
+                return NotFound($"Highscore entry with ID {id} not found.");
+            }
+            return NoContent();
         }
-        return NoContent();
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while deleting high score entry: {ex.Message}");
+            throw;
+        }
     }
 
     [HttpGet("id")]
-    public async Task<IActionResult> GetByIdAsync(int id)
+    public async Task<IActionResult> GetByIdAsync(Guid id)
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
-        var response = await client.GetFromJsonAsync<ScoreResponse>($"api/highscores/{id}");
-        return Ok(response);
+        try
+        {
+            var client = _httpClientFactory.CreateClient("HighscoreMicroService");
+            var response = await client.GetFromJsonAsync<ScoreResponse>($"api/highscores/{id}");
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high score entry: {ex.Message}");
+            throw;
+        }
     }
 }
