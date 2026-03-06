@@ -16,8 +16,23 @@ public class HighScoresService : IHighScoresService
     }
     public async Task<List<ScoreResponse>> GetHighScoresAsync()
     {
-        var highScores = await _highScoresRepository.GetHighScoresAsync();
-        return ConvertModelListToResponseList(highScores);
+        Console.WriteLine("Highscore Microservice (Service): Fetching high scores from repository...");
+        try
+        {
+            var highScores = await _highScoresRepository.GetHighScoresAsync();
+            if (highScores == null || highScores.Count == 0)
+            {
+                Console.WriteLine("Highscore Microservice (Service): No high scores found in repository.");
+                return new List<ScoreResponse>();
+            }
+            Console.WriteLine($"Highscore Microservice (Service): Retrieved {highScores.Count} high score entries from repository.");
+            return ConvertModelListToResponseList(highScores);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Service): Error occurred while fetching high scores: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task<ScoreResponse> SubmitScoreAsync(AddScoreRequest request)
@@ -44,6 +59,7 @@ public class HighScoresService : IHighScoresService
 
     private List<ScoreResponse> ConvertModelListToResponseList(List<HighScoreEntry> highScores)
     {
+        System.Console.WriteLine("Highscore Microservice (Service): Converting high score models to response format...");
         List<ScoreResponse> newList = new List<ScoreResponse>();
         foreach (var score in highScores)
         {
@@ -54,6 +70,7 @@ public class HighScoresService : IHighScoresService
             };
             newList.Add(response);
         }
+        System.Console.WriteLine($"Highscore Microservice (Service): Conversion complete. {newList.Count} entries converted.");
         return newList;
     }
 

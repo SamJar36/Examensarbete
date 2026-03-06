@@ -13,7 +13,7 @@
 
         <div class="highscore-wrapper">
             <ul class="highscore-list">
-                @foreach (var entry in _highScores)
+                @foreach (ScoreResponse entry in _highScores)
                 {
                     <li class="highscore-item">
                         <span class="player-name">@entry.Name</span>
@@ -31,49 +31,51 @@
 
 
 @code {
-    private List<ScoreResponse> _highScoresPreset = new()
+    private List<ScoreResponse> _highScoresPreset = new List<ScoreResponse>()
     {
-        new() { Name = "alex", Score = 1200 },
-        new() { Name = "sam", Score = 950 },
-        new() { Name = "jordan", Score = 800 },
-		new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "alex", Score = 1200 },
+        new ScoreResponse() { Name = "sam", Score = 950 },
+        new ScoreResponse() { Name = "jordan", Score = 800 },
+		new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
     };
-    private List<ScoreResponse> _highScores = new()
+    private List<ScoreResponse> _highScores = new List<ScoreResponse>()
     {
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
-        new() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
+        new ScoreResponse() { Name = "", Score = 0 },
     };
 
     protected override async Task OnInitializedAsync()
     {
-        var client = ClientFactory.CreateClient("ApiGateway");
-        var response = await client.GetFromJsonAsync<List<ScoreResponse>>("scores/highscores");
+        HttpClient? client = ClientFactory.CreateClient(name: "ApiGateway");
+        Console.WriteLine("Blazor: Fetching high scores from API Gateway...");
+        List<ScoreResponse>? response = await client.GetFromJsonAsync<List<ScoreResponse>>(requestUri: "api/highscore");
+        Console.WriteLine($"Blazor: Received high scores from API Gateway... {response?.Count ?? 0} entries found.");
         if (response is not null)
         {
             _highScores.Clear();
-            foreach (var score in response)
+            foreach (ScoreResponse score in response)
             {
                 _highScores.Add(score);
 			};

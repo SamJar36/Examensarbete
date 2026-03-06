@@ -19,24 +19,45 @@ public class HighScoresRepository : IHighScoresRepository
 
     public HighScoresRepository(IConfiguration config)
     {
-        var client = new MongoClient(config.GetConnectionString("MongoDb"));
-        var database = client.GetDatabase("highscoredb");
-        _highScores = database.GetCollection<HighScoreEntry>("Highscores");
 
-        _highScores.InsertMany(_presetHighScores);
-        _nextId = _presetHighScores.Count;
+        try
+        {
+            var client = new MongoClient(config.GetConnectionString("MongoDb"));
+            var database = client.GetDatabase("highscoredb");
+            _highScores = database.GetCollection<HighScoreEntry>("Highscores");
+
+            // _highScores.InsertMany(_presetHighScores);
+            _nextId = _presetHighScores.Count;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Repository): Error occurred while connecting to MongoDB: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task<List<HighScoreEntry>> GetHighScoresAsync()
     {
-        var scores = await _highScores
-        .Find(_ => true)
-        .SortByDescending(h => h.Score)
-        .ToListAsync();
+        Console.WriteLine("Highscore Microservice (Repository): Fetching high scores from MongoDB...");
+        try
+        { 
+            var scores = await _highScores
+            .Find(_ => true)
+            .SortByDescending(h => h.Score)
+            .ToListAsync();
+            System.Console.WriteLine($"Highscore Microservice (Repository): Retrieved {scores.Count} high score entries from MongoDB.");
 
-        var scoresWithEmpties = PopulateListWithEmptyEntries(scores);
+            var scoresWithEmpties = PopulateListWithEmptyEntries(scores);
 
-        return scoresWithEmpties;
+            Console.WriteLine("Highscore Microservice (Repository): Returning high scores with empty entries added if needed.");
+
+            return scoresWithEmpties;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Repository): Error occurred while fetching high scores: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task<HighScoreEntry> SubmitScoreAsync(HighScoreEntry entry)

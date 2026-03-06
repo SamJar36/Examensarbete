@@ -19,15 +19,17 @@ public class HighscoreController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetHighScoresAsync()
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroservice");
+        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
+        Console.WriteLine("API: Calling Highscore Microservice...");
         var highScores = await client.GetFromJsonAsync<List<ScoreResponse>>("api/highscores");
+        Console.WriteLine($"API: Returning high scores... {highScores.Count} entries found.");
         return Ok(highScores);
     }
 
     [HttpPost]
     public async Task<IActionResult> SubmitScoreAsync([FromBody] AddScoreRequest request)
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroservice");
+        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
         var response = await client.PostAsJsonAsync("api/highscores", request);
         return Created("", response);
     }
@@ -35,7 +37,7 @@ public class HighscoreController : ControllerBase
     [HttpDelete("reset")]
     public async Task<IActionResult> ResetHighScoresAsync()
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroservice");
+        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
         var response = await client.DeleteAsync("api/highscores/reset");
         if (response.IsSuccessStatusCode == false)
         {
@@ -47,7 +49,7 @@ public class HighscoreController : ControllerBase
     [HttpDelete("id")]
     public async Task<IActionResult> DeleteHighscoreEntryAsync(int id)
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroservice");
+        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
         var response = await client.DeleteAsync($"api/highscores/{id}");
         if (response.IsSuccessStatusCode == false)
         {
@@ -59,7 +61,7 @@ public class HighscoreController : ControllerBase
     [HttpGet("id")]
     public async Task<IActionResult> GetByIdAsync(int id)
     {
-        var client = _httpClientFactory.CreateClient("HighscoreMicroservice");
+        var client = _httpClientFactory.CreateClient("HighscoreMicroService");
         var response = await client.GetFromJsonAsync<ScoreResponse>($"api/highscores/{id}");
         return Ok(response);
     }
