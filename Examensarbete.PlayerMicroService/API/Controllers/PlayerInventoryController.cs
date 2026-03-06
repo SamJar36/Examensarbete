@@ -4,7 +4,7 @@ namespace Examensarbete.PlayerMicroService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class PlayerInventoryController : ControllerBase
     {
         
     }
