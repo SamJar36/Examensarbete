@@ -45,6 +45,14 @@ public class HighScoresController : ControllerBase
         try
         {
             var result = await _highScoresService.SubmitScoreAsync(request);
+            if (result == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to submit score.");
+            }
+            else
+            {
+                return Created("", result);
+            }
             return Created();
         }
         catch (Exception ex)
@@ -105,6 +113,10 @@ public class HighScoresController : ControllerBase
         try
         {
             ScoreResponse response = await _highScoresService.GetByIdAsync(id);
+            if (response == null)
+            {
+                return NotFound($"Highscore entry with ID {id} not found.");
+            }
             return Ok(response);
         }
         catch (Exception ex)
