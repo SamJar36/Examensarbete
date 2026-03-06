@@ -8,7 +8,6 @@ namespace Examensarbete.HighscoreMicroService.Data.Repositories;
 public class HighScoresRepository : IHighScoresRepository
 {
     private readonly IMongoCollection<HighScoreEntry> _highScores;
-    private int _nextId = 0;
     private List<HighScoreEntry> _presetHighScores = new List<HighScoreEntry>
     {
         new HighScoreEntry { Id = Guid.NewGuid(), Name = "Alice", Score = 1000 },
@@ -20,7 +19,6 @@ public class HighScoresRepository : IHighScoresRepository
 
     public HighScoresRepository(IConfiguration config)
     {
-
         try
         {
             var client = new MongoClient(config.GetConnectionString("MongoDb"));
@@ -33,7 +31,6 @@ public class HighScoresRepository : IHighScoresRepository
             {
                 Console.WriteLine("Highscore Microservice (Repository): No high scores found in MongoDB. Inserting preset high scores...");
                 _highScores.InsertMany(_presetHighScores);
-                _nextId = _presetHighScores.Count;
             }
             else
             {
@@ -43,7 +40,6 @@ public class HighScoresRepository : IHighScoresRepository
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Repository): Error occurred while connecting to MongoDB: {ex.Message}");
-            throw;
         }
     }
 
@@ -67,7 +63,7 @@ public class HighScoresRepository : IHighScoresRepository
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Repository): Error occurred while fetching high scores: {ex.Message}");
-            throw;
+            return new List<HighScoreEntry>();
         }
     }
 
@@ -82,7 +78,7 @@ public class HighScoresRepository : IHighScoresRepository
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Repository): Error occurred while submitting score: {ex.Message}");
-            throw;
+            return null;
         }
     }
 
@@ -96,7 +92,6 @@ public class HighScoresRepository : IHighScoresRepository
                 try
                 {
                     await _highScores.InsertManyAsync(_presetHighScores);
-                    _nextId = _presetHighScores.Count;
                     return true;
                 }
                 catch (Exception ex)
@@ -110,7 +105,7 @@ public class HighScoresRepository : IHighScoresRepository
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Repository): Error occurred while resetting high scores: {ex.Message}");
-            throw;
+            return false;
         }
     }
 
@@ -128,7 +123,7 @@ public class HighScoresRepository : IHighScoresRepository
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Repository): Error occurred while deleting high score entry with ID {id}: {ex.Message}");
-            throw;
+            return false;
         }
     }
 
@@ -141,7 +136,7 @@ public class HighScoresRepository : IHighScoresRepository
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (Repository): Error occurred while fetching high score entry with ID {id}: {ex.Message}");
-            throw;
+            return null;
         }
     }
 
