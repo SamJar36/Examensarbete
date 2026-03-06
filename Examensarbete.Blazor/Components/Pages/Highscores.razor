@@ -41,7 +41,7 @@
                 Score = 0,
             });
         }
-        
+
         try 
         {
             HttpClient? client = ClientFactory.CreateClient(name: "ApiGateway");
@@ -61,14 +61,12 @@
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Blazor: Error occurred while clearing local list and adding highscore: {ex.Message}");
-                    throw;
                 }
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Blazor: Error occurred while fetching high scores: {ex.Message}");
-            throw;
         }
     }
 }
