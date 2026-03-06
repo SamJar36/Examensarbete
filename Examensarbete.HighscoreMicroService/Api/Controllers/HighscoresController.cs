@@ -85,7 +85,7 @@ public class HighScoresController : ControllerBase
         }
     }
 
-    [HttpDelete("id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteHighscoreEntryAsync(Guid id)
     {
         try
@@ -107,7 +107,7 @@ public class HighScoresController : ControllerBase
         }
     }
 
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetByIdAsync(Guid id)
     {
         try
