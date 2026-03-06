@@ -20,12 +20,23 @@ public class HighScoresController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetHighScoresAsync()
     {
-        List<ScoreResponse> highScores = await _highScoresService.GetHighScoresAsync();
-        if (highScores == null || highScores.Count == 0)
+        Console.WriteLine("Highscore Microservice (API): Fetching high scores...");
+        try
         {
-            return Ok(new List<ScoreResponse>());
+            List<ScoreResponse> highScores = await _highScoresService.GetHighScoresAsync();
+            System.Console.WriteLine($"Highscore Microservice (API): Retrieved {highScores.Count} high score entries.");
+            if (highScores == null || highScores.Count == 0)
+            {
+                Console.WriteLine("Highscore Microservice (API): No high scores found.");
+                return Ok(new List<ScoreResponse>());
+            }
+            return Ok(highScores);
         }
-        return Ok(highScores);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high scores: {ex.Message}");
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while fetching high scores.");
+        }
     }
 
     [HttpPost]
