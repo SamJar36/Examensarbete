@@ -35,49 +35,82 @@ public class HighScoresController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high scores: {ex.Message}");
-            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while fetching high scores.");
+            throw;
         }
     }
 
     [HttpPost]
     public async Task<IActionResult> SubmitScoreAsync([FromBody] AddScoreRequest request)
     {
-        var result = await _highScoresService.SubmitScoreAsync(request);
-        return Created();
+        try
+        {
+            var result = await _highScoresService.SubmitScoreAsync(request);
+            return Created();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while submitting score: {ex.Message}");
+            throw;
+        }
     }
 
     [HttpDelete("reset")]
     public async Task<IActionResult> ResetHighScoresAsync()
     {
-        bool isReset = await _highScoresService.ResetHighScoresAsync();
-        if (isReset == false)
+        try
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to reset high scores.");
+            bool isReset = await _highScoresService.ResetHighScoresAsync();
+            if (isReset == false)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to reset high scores.");
+            }
+            else
+            {
+                return Ok();
+            }
+            
         }
-        else
+        catch (Exception ex)
         {
-            return Ok();
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while resetting high scores: {ex.Message}");
+            throw;
         }
     }
 
     [HttpDelete("id")]
-    public async Task<IActionResult> DeleteHighscoreEntryAsync(int id)
+    public async Task<IActionResult> DeleteHighscoreEntryAsync(Guid id)
     {
-        bool isDeleted = await _highScoresService.DeleteHighscoreEntryAsync(id);
-        if (isDeleted == false)
+        try
         {
-            return NotFound($"Highscore entry with ID {id} not found.");
+            bool isDeleted = await _highScoresService.DeleteHighscoreEntryAsync(id);
+            if (isDeleted == false)
+            {
+                return NotFound($"Highscore entry with ID {id} not found.");
+            }
+            else
+            {
+                return NoContent();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return NoContent();
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while deleting high score entry with ID {id}: {ex.Message}");
+            throw;
         }
     }
 
     [HttpGet("id")]
-    public async Task<IActionResult> GetByIdAsync(int id)
+    public async Task<IActionResult> GetByIdAsync(Guid id)
     {
-        ScoreResponse response = await _highScoresService.GetByIdAsync(id);
-        return Ok(response);
+        try
+        {
+            ScoreResponse response = await _highScoresService.GetByIdAsync(id);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high score entry with ID {id}: {ex.Message}");
+            throw;
+        }
     }
 }

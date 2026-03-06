@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using Examensarbete.HighscoreMicroService.Data.Models;
 using Examensarbete.HighscoreMicroService.Data.Interfaces;
+using System;
 
 namespace Examensarbete.HighscoreMicroService.Data.Repositories;
 
@@ -10,11 +11,11 @@ public class HighScoresRepository : IHighScoresRepository
     private int _nextId = 0;
     private List<HighScoreEntry> _presetHighScores = new List<HighScoreEntry>
     {
-        new HighScoreEntry { Id = 1, Name = "Alice", Score = 1000 },
-        new HighScoreEntry { Id = 2, Name = "Bob", Score = 900 },
-        new HighScoreEntry { Id = 3, Name = "Charlie", Score = 800 },
-        new HighScoreEntry { Id = 4, Name = "Diana", Score = 700 },
-        new HighScoreEntry { Id = 5, Name = "Eve", Score = 600 }
+        new HighScoreEntry { Id = Guid.NewGuid(), Name = "Alice", Score = 1000 },
+        new HighScoreEntry { Id = Guid.NewGuid(), Name = "Bob", Score = 900 },
+        new HighScoreEntry { Id = Guid.NewGuid(), Name = "Charlie", Score = 800 },
+        new HighScoreEntry { Id = Guid.NewGuid(), Name = "Diana", Score = 700 },
+        new HighScoreEntry { Id = Guid.NewGuid(), Name = "Eve", Score = 600 }
     };
 
     public HighScoresRepository(IConfiguration config)
@@ -27,7 +28,17 @@ public class HighScoresRepository : IHighScoresRepository
             _highScores = database.GetCollection<HighScoreEntry>("Highscores");
 
             // _highScores.InsertMany(_presetHighScores);
-            _nextId = _presetHighScores.Count;
+            var count = _highScores.CountDocuments(_ => true);
+            if (count == 0)
+            {
+                Console.WriteLine("Highscore Microservice (Repository): No high scores found in MongoDB. Inserting preset high scores...");
+                _highScores.InsertMany(_presetHighScores);
+                _nextId = _presetHighScores.Count;
+            }
+            else
+            {
+                Console.WriteLine($"Highscore Microservice (Repository): Found {count} high score entries in MongoDB. Skipping preset insertion.");
+            }
         }
         catch (Exception ex)
         {
@@ -45,7 +56,7 @@ public class HighScoresRepository : IHighScoresRepository
             .Find(_ => true)
             .SortByDescending(h => h.Score)
             .ToListAsync();
-            System.Console.WriteLine($"Highscore Microservice (Repository): Retrieved {scores.Count} high score entries from MongoDB.");
+            Console.WriteLine($"Highscore Microservice (Repository): Retrieved {scores.Count} high score entries from MongoDB.");
 
             var scoresWithEmpties = PopulateListWithEmptyEntries(scores);
 
@@ -62,36 +73,76 @@ public class HighScoresRepository : IHighScoresRepository
 
     public async Task<HighScoreEntry> SubmitScoreAsync(HighScoreEntry entry)
     {
-        entry.Id = _nextId++;
-        await _highScores.InsertOneAsync(entry);
-        return entry;
+        try
+        {
+            entry.Id = Guid.NewGuid();
+            await _highScores.InsertOneAsync(entry);
+            return entry;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Repository): Error occurred while submitting score: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task<bool> ResetHighScoresAsync()
     {
-        var deleteResult = await _highScores.DeleteManyAsync(_ => true);
-        if (deleteResult.IsAcknowledged)
+        try
         {
-            await _highScores.InsertManyAsync(_presetHighScores);
-            _nextId = _presetHighScores.Count;
-            return true;
+            var deleteResult = await _highScores.DeleteManyAsync(_ => true);
+            if (deleteResult.IsAcknowledged)
+            {
+                try
+                {
+                    await _highScores.InsertManyAsync(_presetHighScores);
+                    _nextId = _presetHighScores.Count;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Highscore Microservice (Repository): Error occurred while inserting preset high scores after reset: {ex.Message}");
+                    throw;
+                }
+            }
+            return false;
         }
-        return false;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Repository): Error occurred while resetting high scores: {ex.Message}");
+            throw;
+        }
     }
 
-    public async Task<bool> DeleteHighScoreEntryAsync(int id)
+    public async Task<bool> DeleteHighScoreEntryAsync(Guid id)
     {
-        var deleteResult = await _highScores.DeleteOneAsync(h => h.Id == id);
-        if (deleteResult.IsAcknowledged)
+        try
         {
-            return true;
+            var deleteResult = await _highScores.DeleteOneAsync(h => h.Id == id);
+            if (deleteResult.IsAcknowledged)
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Repository): Error occurred while deleting high score entry with ID {id}: {ex.Message}");
+            throw;
+        }
     }
 
-    public async Task<HighScoreEntry> GetByIdAsync(int id)
+    public async Task<HighScoreEntry> GetByIdAsync(Guid id)
     {
-        return await _highScores.Find(h => h.Id == id).FirstOrDefaultAsync();
+        try
+        {
+            return await _highScores.Find(h => h.Id == id).FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Repository): Error occurred while fetching high score entry with ID {id}: {ex.Message}");
+            throw;
+        }
     }
 
     private List<HighScoreEntry> PopulateListWithEmptyEntries(List<HighScoreEntry> scores)
@@ -105,7 +156,7 @@ public class HighScoresRepository : IHighScoresRepository
         {
             scores.Add(new HighScoreEntry
             {
-                Name = "None",
+                Name = "",
                 Score = 0
             });
         }

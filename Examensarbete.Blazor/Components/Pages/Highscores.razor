@@ -31,54 +31,44 @@
 
 
 @code {
-    private List<ScoreResponse> _highScoresPreset = new List<ScoreResponse>()
-    {
-        new ScoreResponse() { Name = "alex", Score = 1200 },
-        new ScoreResponse() { Name = "sam", Score = 950 },
-        new ScoreResponse() { Name = "jordan", Score = 800 },
-		new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-    };
-    private List<ScoreResponse> _highScores = new List<ScoreResponse>()
-    {
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-        new ScoreResponse() { Name = "", Score = 0 },
-    };
-
+    private List<ScoreResponse> _highScores = new List<ScoreResponse>();
     protected override async Task OnInitializedAsync()
     {
-        HttpClient? client = ClientFactory.CreateClient(name: "ApiGateway");
-        Console.WriteLine("Blazor: Fetching high scores from API Gateway...");
-        List<ScoreResponse>? response = await client.GetFromJsonAsync<List<ScoreResponse>>(requestUri: "api/highscore");
-        Console.WriteLine($"Blazor: Received high scores from API Gateway... {response?.Count ?? 0} entries found.");
-        if (response is not null)
-        {
-            _highScores.Clear();
-            foreach (ScoreResponse score in response)
+        for (int i = 0; i < 14; i++) {
+            _highScores.Add(new ScoreResponse
             {
-                _highScores.Add(score);
-			};
+                Name = "",
+                Score = 0,
+            });
+        }
+        
+        try 
+        {
+            HttpClient? client = ClientFactory.CreateClient(name: "ApiGateway");
+            Console.WriteLine("Blazor: Fetching high scores from API Gateway...");
+            List<ScoreResponse>? response = await client.GetFromJsonAsync<List<ScoreResponse>>(requestUri: "api/highscore");
+            Console.WriteLine($"Blazor: Received high scores from API Gateway... {response?.Count ?? 0} entries found.");
+            if (response is not null)
+            {
+                try 
+                {
+                    _highScores.Clear();
+                    foreach (ScoreResponse score in response)
+                    {
+                        _highScores.Add(score);
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Blazor: Error occurred while clearing local list and adding highscore: {ex.Message}");
+                    throw;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Blazor: Error occurred while fetching high scores: {ex.Message}");
+            throw;
         }
     }
 }

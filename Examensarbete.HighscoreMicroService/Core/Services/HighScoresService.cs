@@ -37,29 +37,61 @@ public class HighScoresService : IHighScoresService
 
     public async Task<ScoreResponse> SubmitScoreAsync(AddScoreRequest request)
     {
-        var highScore = await _highScoresRepository.SubmitScoreAsync(ConvertAddScoreRequestToModel(request));
-        return ConvertModelToResponse(highScore);
+        try
+        {
+            var highScore = await _highScoresRepository.SubmitScoreAsync(ConvertAddScoreRequestToModel(request));
+            return ConvertModelToResponse(highScore);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Service): Error occurred while submitting score: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task<bool> ResetHighScoresAsync()
     {
-        return await _highScoresRepository.ResetHighScoresAsync();
+        try
+        {
+            return await _highScoresRepository.ResetHighScoresAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Highscore Microservice (Service): Error occurred while resetting high scores: {ex.Message}");
+            throw;
+        }
     }
 
-    public async Task<bool> DeleteHighscoreEntryAsync(int id)
+    public async Task<bool> DeleteHighscoreEntryAsync(Guid id)
     {
-        return await _highScoresRepository.DeleteHighScoreEntryAsync(id);
+        try
+        {
+            return await _highScoresRepository.DeleteHighScoreEntryAsync(id);
+        }
+        catch
+        {
+            Console.WriteLine($"Highscore Microservice (Service): Error occurred while deleting high score entry with ID {id}.");
+            throw;
+        }
     }
 
-    public async Task<ScoreResponse> GetByIdAsync(int id)
+    public async Task<ScoreResponse> GetByIdAsync(Guid id)
     {
-        var highScore = await _highScoresRepository.GetByIdAsync(id);
-        return ConvertModelToResponse(highScore);
+        try
+        {
+            var highScore = await _highScoresRepository.GetByIdAsync(id);
+            return ConvertModelToResponse(highScore);
+        }
+        catch
+        {
+            Console.WriteLine($"Highscore Microservice (Service): Error occurred while fetching high score entry with ID {id}.");
+            throw;
+        }
     }
 
     private List<ScoreResponse> ConvertModelListToResponseList(List<HighScoreEntry> highScores)
     {
-        System.Console.WriteLine("Highscore Microservice (Service): Converting high score models to response format...");
+        Console.WriteLine("Highscore Microservice (Service): Converting high score models to response format...");
         List<ScoreResponse> newList = new List<ScoreResponse>();
         foreach (var score in highScores)
         {
@@ -70,7 +102,7 @@ public class HighScoresService : IHighScoresService
             };
             newList.Add(response);
         }
-        System.Console.WriteLine($"Highscore Microservice (Service): Conversion complete. {newList.Count} entries converted.");
+        Console.WriteLine($"Highscore Microservice (Service): Conversion complete. {newList.Count} entries converted.");
         return newList;
     }
 
