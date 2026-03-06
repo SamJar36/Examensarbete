@@ -5,4 +5,5 @@
   <Project Path="Examensarbete.Api/Examensarbete.Api.csproj" />
   <Project Path="Examensarbete.Blazor/Examensarbete.Blazor.csproj" />
   <Project Path="Examensarbete.HighscoreMicroService/Examensarbete.HighscoreMicroService.csproj" />
+  <Project Path="Examensarbete.PlayerMicroService/Examensarbete.PlayerMicroService.csproj" Id="f8f5aa05-6975-42a0-9f32-0bbd743a772a" />
 </Solution>
