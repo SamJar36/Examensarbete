@@ -15,6 +15,18 @@ services:
     depends_on:
       - highscoredb
 
+  playerservice:
+    image: playerservice
+    build:
+      context: .
+      dockerfile: Examensarbete.PlayerMicroService/Dockerfile
+    ports:
+      - "5004:8080"
+    networks:
+      - examensarbete_network
+    depends_on:
+      - highscoredb
+
   apigateway:
     image: apigateway
     build:
