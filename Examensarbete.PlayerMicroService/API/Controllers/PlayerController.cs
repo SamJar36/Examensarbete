@@ -41,5 +41,11 @@ namespace Examensarbete.PlayerMicroService.Controllers
         {
             return NoContent();
         }
+
+        [HttpPut("{id}/level/{level}")]
+        public async Task<IActionResult> UpdatePlayerLevelAsync(Guid id, int level)
+        {
+            return NoContent();
+        }
     }
 }
