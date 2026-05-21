@@ -71,6 +71,7 @@ public class HighScoresRepository : IHighScoresRepository
     {
         try
         {
+            Console.WriteLine("Highscore Microservice (Repository): Trying to insert score to database");
             entry.Id = Guid.NewGuid();
             await _highScores.InsertOneAsync(entry);
             return entry;

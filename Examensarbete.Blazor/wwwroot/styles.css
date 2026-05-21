@@ -1,0 +1,436 @@
+﻿
+:root {
+    --beige: #f5e6c8;
+    --black: #0a0a0a;
+    --white: #f0ece0;
+    --gold: #c8a84b;
+    --gold-light: #e8c86a;
+    --accent: #7ecba1;
+    --frame-size: 10px;
+    --box-max: 720px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, .page-wrapper {
+    background-color: var(--beige);
+    min-height: 100vh;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 24px 40px;
+    gap: 0;
+    background-color: var(--beige);
+    /* subtle parchment texture via repeating gradient */
+    background-image: repeating-linear-gradient( 0deg, transparent, transparent 39px, rgba(180,150,90,0.07) 39px, rgba(180,150,90,0.07) 40px ), repeating-linear-gradient( 90deg, transparent, transparent 39px, rgba(180,150,90,0.05) 39px, rgba(180,150,90,0.05) 40px );
+}
+/* ─── SECTIONS ─────────────────────────────────────────── */
+
+.hero-section {
+    width: 100%;
+    max-width: var(--box-max);
+    margin-bottom: 48px;
+    animation: fadeSlideIn 0.8s ease both;
+}
+
+.content-section {
+    width: 100%;
+    max-width: var(--box-max);
+    margin-bottom: 48px;
+    animation: fadeSlideIn 0.6s ease both;
+}
+
+.cta-section {
+    margin-top: 8px;
+}
+
+.image-section {
+    width: 100%;
+    max-width: var(--box-max);
+    margin-bottom: 48px;
+    animation: fadeSlideIn 0.6s ease both;
+}
+/* ─── PIXEL FRAME ───────────────────────────────────────── */
+
+.pixel-frame {
+    position: relative;
+    background: var(--black);
+    padding: var(--frame-size);
+}
+/* Outer border */
+.pixel-frame::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 4px solid var(--gold);
+    pointer-events: none;
+}
+/* Inner glow border */
+.pixel-frame::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 2px solid rgba(200, 168, 75, 0.3);
+    pointer-events: none;
+}
+/* Corner decorations */
+.frame-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--gold);
+    z-index: 2;
+}
+
+.frame-corner.top-left {
+    top: -8px;
+    left: -8px;
+}
+
+.frame-corner.top-right {
+    top: -8px;
+    right: -8px;
+}
+
+.frame-corner.bottom-left {
+    bottom: -8px;
+    left: -8px;
+}
+
+.frame-corner.bottom-right {
+    bottom: -8px;
+    right: -8px;
+}
+/* Edge dots */
+.frame-edge {
+    position: absolute;
+    background: var(--gold);
+    z-index: 1;
+}
+
+.frame-edge.top, .frame-edge.bottom {
+    height: 4px;
+    left: 12px;
+    right: 12px;
+}
+
+.frame-edge.left, .frame-edge.right {
+    width: 4px;
+    top: 12px;
+    bottom: 12px;
+}
+
+.frame-edge.top {
+    top: -6px;
+}
+
+.frame-edge.bottom {
+    bottom: -6px;
+}
+
+.frame-edge.left {
+    left: -6px;
+}
+
+.frame-edge.right {
+    right: -6px;
+}
+/* Inner content area */
+.box-inner {
+    background: var(--black);
+    padding: 28px 32px;
+    border: 2px solid rgba(200, 168, 75, 0.25);
+}
+/* ─── TYPOGRAPHY ────────────────────────────────────────── */
+
+.hero-text {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.85rem;
+    line-height: 2.2;
+    color: var(--white);
+    text-align: center;
+    text-shadow: 0 0 12px rgba(200, 168, 75, 0.4);
+}
+
+.body-text {
+    font-family: 'VT323', monospace;
+    font-size: 1.7rem;
+    line-height: 1.6;
+    color: var(--white);
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.title-highlight {
+    color: var(--gold-light);
+    text-shadow: 0 0 16px rgba(200, 168, 75, 0.7);
+}
+
+.highlight {
+    color: var(--accent);
+    text-shadow: 0 0 8px rgba(126, 203, 161, 0.5);
+}
+
+.play-link {
+    color: var(--gold-light);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.15s, text-shadow 0.15s;
+    text-shadow: 0 0 6px rgba(200, 168, 75, 0.5);
+}
+
+.play-link:hover {
+    color: #fff;
+    text-shadow: 0 0 14px rgba(200, 168, 75, 0.9);
+}
+/* ─── IMAGE FRAME ───────────────────────────────────────── */
+
+.image-frame {
+    position: relative;
+    border: 4px solid var(--gold);
+    background: var(--black);
+    padding: 6px;
+    box-shadow: 0 0 0 2px var(--black), 0 0 0 4px rgba(200, 168, 75, 0.3), 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.image-frame::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 2px solid rgba(200, 168, 75, 0.2);
+    pointer-events: none;
+}
+
+.image-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+}
+/* ─── CTA FRAME ─────────────────────────────────────────── */
+
+.cta-frame::before {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(126, 203, 161, 0.3);
+}
+
+.cta-frame .frame-corner {
+    background: var(--accent);
+}
+
+.cta-frame .frame-edge {
+    background: var(--accent);
+}
+/* ─── FOOTER ────────────────────────────────────────────── */
+
+.page-footer {
+    margin-top: 48px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    color: rgba(100, 80, 40, 0.5);
+    letter-spacing: 0.2em;
+}
+/* ─── ANIMATION ─────────────────────────────────────────── */
+
+@@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+
+@@media (max-width: 600px) {
+    .hero-text {
+        font-size: 0.65rem;
+        line-height: 2;
+    }
+
+    .body-text {
+        font-size: 1.4rem;
+    }
+
+    .box-inner {
+        padding: 20px 18px;
+    }
+
+    :root {
+        --box-max: 100%;
+    }
+}
+
+/* ────────────────────────────────────────────── */
+/* TITLE */
+/* ────────────────────────────────────────────── */
+
+/* CENTER THE TITLE SECTION */
+
+.hero-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 42px;
+}
+
+/* TITLE FRAME */
+
+.title-frame {
+    width: min(1100px, 95vw);
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 40px rgba(200,168,75,0.25), 0 12px 40px rgba(0,0,0,0.45);
+}
+
+/* INNER TITLE BOX */
+
+.title-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 42px 20px;
+    background: linear-gradient( 180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.15) ), #050505;
+}
+
+/* TITLE TEXT */
+
+.game-title {
+    width: 100%;
+    text-align: center;
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    color: #f6d36d;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    margin: 0 auto;
+    text-shadow: 0 0 6px rgba(255,220,120,0.9), 0 0 18px rgba(255,210,90,0.65), 6px 6px 0 #8b6b20;
+}
+/* ────────────────────────────────────────────── */
+/* GAME SECTION */
+/* ────────────────────────────────────────────── */
+
+.game-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-frame {
+    width: fit-content;
+    background: #000;
+    box-shadow: 0 0 50px rgba(200,168,75,0.18), 0 18px 50px rgba(0,0,0,0.5);
+}
+/* INNER GAME AREA */
+
+.game-box {
+    padding: 22px;
+    background: linear-gradient( 180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12) ), #050505;
+}
+/* WEBGL WINDOW */
+
+.game-window {
+    width: 1280px;
+    height: 720px;
+    display: block;
+    background: black;
+    border: 3px solid #d4b04c;
+    box-shadow: inset 0 0 30px rgba(255,215,120,0.12), 0 0 18px rgba(200,168,75,0.18);
+}
+/* ────────────────────────────────────────────── */
+/* RESPONSIVE */
+/* ────────────────────────────────────────────── */
+
+@media (max-width: 1400px) {
+
+    .game-window {
+        width: 1000px;
+        height: 562px;
+    }
+}
+
+@media (max-width: 1100px) {
+
+    .game-window {
+        width: 90vw;
+        height: calc(90vw * 0.5625);
+    }
+
+    .title-box {
+        padding: 34px 18px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .page-wrapper {
+        padding-top: 30px;
+    }
+
+    .game-box {
+        padding: 12px;
+    }
+
+    .game-title {
+        letter-spacing: 0.08em;
+    }
+}
+
+/* ────────────────────────────────────────────── */
+/* HIGHSCORES (CLEAN TERMINAL STYLE) */
+/* ────────────────────────────────────────────── */
+
+.highscore-list {
+    width: 100%;
+}
+
+/* Each entry row */
+.highscore-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    font-family: 'VT323', monospace;
+    font-size: 1.7rem;
+    color: #ffffff;
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* LEFT: name */
+.score-name {
+    text-align: left;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+}
+
+/* RIGHT: score pinned hard right */
+.score-value {
+    text-align: right;
+    color: #ffffff;
+    min-width: 120px;
+}
+
+/* FULL-WIDTH DIVIDER BETWEEN ROWS */
+.highscore-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    margin: 6px 0;
+}
+

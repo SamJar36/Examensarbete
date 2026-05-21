@@ -39,6 +39,7 @@ public class HighScoresService : IHighScoresService
     {
         try
         {
+            Console.WriteLine("Highscore Microservice (Service): Trying to reach repository for POST");
             var highScore = await _highScoresRepository.SubmitScoreAsync(ConvertAddScoreRequestToModel(request));
             return ConvertModelToResponse(highScore);
         }

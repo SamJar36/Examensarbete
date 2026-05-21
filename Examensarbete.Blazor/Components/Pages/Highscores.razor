@@ -5,29 +5,79 @@
 
 <PageTitle>Highscores</PageTitle>
 
-<div class="background">
-    <h1 class="highscore-title">Highscores</h1>
+<div class="page-wrapper">
 
-    <div class="image-frame">
-        <div class="image-left"></div>
+    <!-- TITLE FRAME -->
+    <section class="content-section">
 
-        <div class="highscore-wrapper">
-            <ul class="highscore-list">
-                @foreach (ScoreResponse entry in _highScores)
-                {
-                    <li class="highscore-item">
-                        <span class="player-name">@entry.Name</span>
-                        <span class="player-score">@entry.Score</span>
-                    </li>
-                }
-            </ul>
+        <div class="pixel-frame">
+            <span class="frame-corner top-left"></span>
+            <span class="frame-corner top-right"></span>
+            <span class="frame-corner bottom-left"></span>
+            <span class="frame-corner bottom-right"></span>
+
+            <span class="frame-edge top"></span>
+            <span class="frame-edge bottom"></span>
+            <span class="frame-edge left"></span>
+            <span class="frame-edge right"></span>
+
+            <div class="box-inner">
+
+                <div class="hero-text title-highlight">
+                    HIGHSCORES
+                </div>
+
+            </div>
         </div>
 
-        <div class="image-right"></div>
-    </div>
+    </section>
+
+    <!-- SCORES FRAME -->
+    <section class="content-section">
+
+        <div class="pixel-frame">
+            <span class="frame-corner top-left"></span>
+            <span class="frame-corner top-right"></span>
+            <span class="frame-corner bottom-left"></span>
+            <span class="frame-corner bottom-right"></span>
+
+            <span class="frame-edge top"></span>
+            <span class="frame-edge bottom"></span>
+            <span class="frame-edge left"></span>
+            <span class="frame-edge right"></span>
+
+            <div class="box-inner">
+
+                <div class="highscore-list">
+
+                    @for (int i = 0; i < _highScores.Count; i++)
+                    {
+                        var score = _highScores[i];
+
+                        <div class="highscore-row">
+                            <div class="score-name">
+                                @(score.Name?.ToUpper() ?? "")
+                            </div>
+
+                            <div class="score-value">
+                                @score.Score
+                            </div>
+                        </div>
+
+                        @if (i < _highScores.Count - 1)
+                        {
+                            <div class="highscore-divider"></div>
+                        }
+                    }
+
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
 </div>
-
-
 
 
 @code {

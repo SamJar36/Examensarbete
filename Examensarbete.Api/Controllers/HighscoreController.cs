@@ -29,7 +29,7 @@ public class HighscoreController : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high scores: {ex.Message}");
+            Console.WriteLine($"API: Error occurred while fetching high scores: {ex.Message}");
             return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while fetching high scores.");
         }   
     }
@@ -39,13 +39,14 @@ public class HighscoreController : ControllerBase
     {
         try
         {
+            Console.WriteLine($"API: Calling Highscore Microservice endpoint for POST procedure");
             var client = _httpClientFactory.CreateClient("HighscoreMicroService");
             var response = await client.PostAsJsonAsync("api/highscores", request);
             return Created("", response);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Highscore Microservice (API): Error occurred while submitting score: {ex.Message}");
+            Console.WriteLine($"API: Error occurred while submitting score: {ex.Message}");
             return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while submitting the score.");
         }
     }
@@ -65,7 +66,7 @@ public class HighscoreController : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Highscore Microservice (API): Error occurred while resetting high scores: {ex.Message}");
+            Console.WriteLine($"API: Error occurred while resetting high scores: {ex.Message}");
             return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while resetting high scores.");
         }
     }
@@ -85,7 +86,7 @@ public class HighscoreController : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Highscore Microservice (API): Error occurred while deleting high score entry: {ex.Message}");
+            Console.WriteLine($"API: Error occurred while deleting high score entry: {ex.Message}");
             return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred while deleting high score entry with ID {id}.");
         }
     }
@@ -101,7 +102,7 @@ public class HighscoreController : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Highscore Microservice (API): Error occurred while fetching high score entry: {ex.Message}");
+            Console.WriteLine($"API: Error occurred while fetching high score entry: {ex.Message}");
             return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred while fetching high score entry with ID {id}.");
         }
     }

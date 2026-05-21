@@ -44,13 +44,16 @@ public class HighScoresController : ControllerBase
     {
         try
         {
+            Console.WriteLine("Highscore Microservice (API): Trying to reach POST service");
             var result = await _highScoresService.SubmitScoreAsync(request);
             if (result == null)
             {
+                Console.WriteLine("Highscore Microservice (API): Failed to submit score");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to submit score.");
             }
             else
             {
+                Console.WriteLine("Highscore Microservice (API): Succesfully created highscore");
                 return Created("", result);
             }
             return Created();

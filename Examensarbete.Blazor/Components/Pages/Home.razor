@@ -1,7 +1,138 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Bawnie</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="page-wrapper">
 
-Welcome to your new app.
+    <!-- Hero text box -->
+    <section class="hero-section">
+        <div class="pixel-frame">
+            <div class="frame-corner top-left"></div>
+            <div class="frame-corner top-right"></div>
+            <div class="frame-corner bottom-left"></div>
+            <div class="frame-corner bottom-right"></div>
+            <div class="frame-edge top"></div>
+            <div class="frame-edge bottom"></div>
+            <div class="frame-edge left"></div>
+            <div class="frame-edge right"></div>
+            <div class="box-inner">
+                <p class="hero-text">
+                    Welcome to <span class="title-highlight">Bawnie</span>, a retro-style game about a bunny on an adventure in a magical world full of fun and peril!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Picture 1 -->
+    <section class="image-section">
+        <div class="image-frame">
+            <img src="Images/picture1.png" alt="Bawnie gameplay screenshot" />
+        </div>
+    </section>
+
+    <!-- Box 2 -->
+    <section class="content-section">
+        <div class="pixel-frame">
+            <div class="frame-corner top-left"></div>
+            <div class="frame-corner top-right"></div>
+            <div class="frame-corner bottom-left"></div>
+            <div class="frame-corner bottom-right"></div>
+            <div class="frame-edge top"></div>
+            <div class="frame-edge bottom"></div>
+            <div class="frame-edge left"></div>
+            <div class="frame-edge right"></div>
+            <div class="box-inner">
+                <p class="body-text">The objective of the game is to find the <span class="highlight">Castle Key</span>, hidden somewhere in the world, and go through the <span class="highlight">Castle Door</span>. Everything you've collected in the game will then be counted towards a highscore. Can you make the <span class="highlight">Highscore list?</span> </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Picture 2 -->
+    <section class="image-section">
+        <div class="image-frame">
+            <img src="Images/picture2.png" alt="Castle Key objective" />
+        </div>
+    </section>
+
+    <!-- Box 3 -->
+    <section class="content-section">
+        <div class="pixel-frame">
+            <div class="frame-corner top-left"></div>
+            <div class="frame-corner top-right"></div>
+            <div class="frame-corner bottom-left"></div>
+            <div class="frame-corner bottom-right"></div>
+            <div class="frame-edge top"></div>
+            <div class="frame-edge bottom"></div>
+            <div class="frame-edge left"></div>
+            <div class="frame-edge right"></div>
+            <div class="box-inner">
+                <p class="body-text">Scattered throughout the land are a bunch of <span class="highlight">mysterious chests</span> with a spell put upon them. Every time you start a new game, the contents of all the chests are randomized, making each playthrough unique.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Picture 4 -->
+    <section class="image-section">
+        <div class="image-frame">
+            <img src="Images/picture4.png" alt="Mysterious chests" />
+        </div>
+    </section>
+
+    <!-- Box 4 -->
+    <section class="content-section">
+        <div class="pixel-frame">
+            <div class="frame-corner top-left"></div>
+            <div class="frame-corner top-right"></div>
+            <div class="frame-corner bottom-left"></div>
+            <div class="frame-corner bottom-right"></div>
+            <div class="frame-edge top"></div>
+            <div class="frame-edge bottom"></div>
+            <div class="frame-edge left"></div>
+            <div class="frame-edge right"></div>
+            <div class="box-inner">
+                <p class="body-text">Interact with <span class="highlight">kooky characters</span> placed throughout the world.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Picture 3 -->
+    <section class="image-section">
+        <div class="image-frame">
+            <img src="Images/picture3.png" alt="Characters" />
+        </div>
+    </section>
+
+    <!-- Final CTA box -->
+    <section class="content-section cta-section">
+        <div class="pixel-frame cta-frame">
+            <div class="frame-corner top-left"></div>
+            <div class="frame-corner top-right"></div>
+            <div class="frame-corner bottom-left"></div>
+            <div class="frame-corner bottom-right"></div>
+            <div class="frame-edge top"></div>
+            <div class="frame-edge bottom"></div>
+            <div class="frame-edge left"></div>
+            <div class="frame-edge right"></div>
+            <div class="box-inner">
+                <p class="body-text">
+                    Interested? Of course you are! But don't let me hold you up;
+                    <span class="play-link" @onclick="GoToGame">click here</span>
+                    to play the game directly in your browser. Good luck!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="page-footer">
+        <p>&#9670; Bawnie &#9670;</p>
+    </footer>
+
+</div>
+
+@code {
+    private void GoToGame()
+    {
+        NavigationManager.NavigateTo("/game");
+    }
+}
