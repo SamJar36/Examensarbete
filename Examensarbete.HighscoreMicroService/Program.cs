@@ -16,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IHighScoresService, HighScoresService>();
 builder.Services.AddScoped<IHighScoresRepository, HighScoresRepository>();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
